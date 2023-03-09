@@ -6,18 +6,12 @@ const morgan = require('morgan');
 const connectDB = require('./config/db');
 require('dotenv').config();
 
-
+// configuration
 const app = express();
-
-
-app.use(cors({
-    origin: '*'
-}));
+app.use(express.json());
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(morgan('dev'));
-
-connectDB();
 
 const PORT = process.env.PORT || 5001;
 
@@ -33,6 +27,8 @@ app.get('/status', (req, res) => {
 app.use("/user", require('./routes/user'));
 app.use("/campaign", require('./routes/campaign'));
 
+// database 
+connectDB();
 
 app.listen(PORT, () => {
     console.log('listening on port ' + PORT);
