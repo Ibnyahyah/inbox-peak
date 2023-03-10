@@ -16,7 +16,6 @@ const createCampaign = async (req, res) => {
         res.status(200).send({ message: "Campaign created" });
     } catch (error) {
         res.status(500).send({ message: "Something went wrong", error: error.message });
-        console.log(error);
     }
 }
 
@@ -74,15 +73,16 @@ const getACampaign = async (req, res) => {
 // get all campaign
 const getAllCampaign = async (req, res) => {
     try {
-        const token = req.headers.authorization.split(' ')[1];
-        if (token.trim() == '') return res.status(403).send({ message: "Token is undefined." });
+        const token = req.headers?.authorization.split(' ')[1];
+        if (token?.trim() == '') return res.status(403).send({ message: "Token is undefined." });
         const decodedData = jwt.verify(token, process.env.JWT_SECRET);
-        if (decodedData.role.trim().toLowerCase() !== 'admin') return res.status(403).send({ message: "Unauthorized user." });
+        if (decodedData?.role?.trim()?.toLowerCase() !== 'admin') return res.status(403).send({ message: "Unauthorized user." });
         const campaigns = await Campaign.find();
         res.status(200).send(campaigns);
 
     } catch (error) {
         res.status(500).send({ message: "Something went wrong", error: error.message });
+        console.log(error);
     }
 }
 
