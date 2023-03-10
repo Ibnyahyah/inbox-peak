@@ -8,14 +8,15 @@ const createCampaign = async (req, res) => {
     try {
         const { campaignID, uploaded_csv, sender_name, sender_email, subject, source_of_traffic, browser_type, country, open_rate, inbox_rate, bounce_rate, unsubscribe, email_sent, total_emails_in_csv_file } = req.body;
 
-        const token = req.headers.authorization.split(' ')[1];
-        if (token.trim() == '') return res.status(403).send({ message: "Token is undefined." });
+        const token = req.headers?.authorization.split(' ')[1];
+        if (token?.trim() == '') return res.status(403).send({ message: "Token is undefined." });
         const decodedData = jwt.verify(token, process.env.JWT_SECRET);
-        if (decodedData.role.trim().toLowerCase() !== 'admin') return res.status(403).send({ message: "Unauthorized user." });
+        if (decodedData.role?.trim().toLowerCase() !== 'admin') return res.status(403).send({ message: "Unauthorized user." });
         await Campaign.create({ campaignID, uploaded_csv, sender_name, sender_email, subject, source_of_traffic, browser_type, country, open_rate, inbox_rate, bounce_rate, unsubscribe, email_sent, creator: decodedData.username, total_emails_in_csv_file });
         res.status(200).send({ message: "Campaign created" });
     } catch (error) {
         res.status(500).send({ message: "Something went wrong", error: error.message });
+        console.log(error);
     }
 }
 

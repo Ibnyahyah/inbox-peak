@@ -66,7 +66,7 @@ const campaignSchema = mongoose.Schema({
         type: String,
         required: true,
     }
-}, { timestamp: true });
+}, { timestamps: true });
 
 const Campaign = mongoose.model('Campaign', campaignSchema);
 

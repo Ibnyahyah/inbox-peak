@@ -30,7 +30,7 @@ const userSchema = mongoose.Schema({
         enum: ["admin", "editor", "viewer"],
         required: true,
     },
-}, { timestamp: true });
+}, { timestamps: true });
 
 const User = mongoose.model('User', userSchema);
 
