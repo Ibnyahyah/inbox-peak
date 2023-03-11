@@ -44,7 +44,7 @@ const updateCampaign = async (req, res) => {
         if (bounce_rate) campaign.bounce_rate = bounce_rate;
         if (unsubscribe) campaign.unsubscribe = unsubscribe;
         if (email_sent) campaign.email_sent = email_sent;
-
+if (total_emails_in_csv_file) campaign.total_emails_in_csv_file = total_emails_in_csv_file;
         await campaign.save();
         res.status(200).send({ message: "Campaign updated successfully." });
     } catch (error) {
