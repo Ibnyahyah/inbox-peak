@@ -30,7 +30,7 @@ const updateCampaign = async (req, res) => {
         if (decodedData.role.trim().toLowerCase() !== 'admin') return res.status(403).send({ message: "Unauthorized user." });
         const campaign = await Campaign.findByIdAndUpdate(id);
         if (!campaign) return res.status(404).send({ message: "Campaign not found." });
-        const { uploaded_csv, sender_name, sender_email, subject, source_of_traffic, browser_type, country, open_rate, inbox_rate, bounce_rate, unsubscribe, email_sent } = req.body;
+        const { uploaded_csv, sender_name, sender_email, subject, source_of_traffic, browser_type, country, open_rate, inbox_rate, bounce_rate, unsubscribe, email_sent, total_emails_in_csv_file } = req.body;
 
         if (uploaded_csv) campaign.uploaded_csv = uploaded_csv;
         if (sender_name) campaign.sender_name = sender_name;
