@@ -141,7 +141,7 @@ const changeAnAdminPassword = async (req, res) => {
 
 
 
-// Revoke user access
+// Revoke user access to data
 const revokeUserAccess = async (req, res) => {
     try {
         const { id } = req.params;
