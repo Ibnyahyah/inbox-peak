@@ -147,7 +147,7 @@ const getUser = async (req, res) => {
         const { id } = req.params;
         const token = req.headers.authorization.split(' ')[1];
         const decodedData = jwt.verify(token, process.env.JWT_SECRET);
-        if (decodedData.role.toLowerCase() !== 'admin') return res.status(403).send({ message: "unauthorized" });
+        if (decodedData.role.toLowerCase() == '' || decodedData.role.toLowerCase() == null || decodedData.role.toLowerCase() == undefined) return res.status(403).send({ message: "unauthorized" });
         const user = await User.findById(id);
         if (!user) return res.status(404).send({ message: "User not found, sign up" });
         res.status(200).json(user);
@@ -155,6 +155,7 @@ const getUser = async (req, res) => {
         res.status(500).send({ message: "Something went wrong", error: error.message });
     }
 }
+
 // Revoke user access to data
 const revokeUserAccess = async (req, res) => {
     try {
@@ -171,6 +172,20 @@ const revokeUserAccess = async (req, res) => {
         res.status(500).send({ message: "Something went wrong", error: error.message });
     }
 }
+// Delete User
+const deleteUser = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const token = req.headers.authorization.split(' ')[1];
+        const decodedData = jwt.verify(token, process.env.JWT_SECRET);
+        if (decodedData.role.toLowerCase() !== 'admin') return res.status(403).send({ message: "unauthorized" });
+        const user = await User.findByIdAndDelete(id);
+        if (!user) return res.status(404).send({ message: "User not found, sign up" });
+        res.status(200).json({ "message": `${user.username} deleted successfully.` });
+    } catch (error) {
+        res.status(500).send({ message: "Something went wrong", error: error.message });
+    }
+}
 
 
-module.exports = { register, login, updateUser, changePassword, createNewAdmin, getAllUser, revokeUserAccess,getUser };
+module.exports = { register, login, updateUser, changePassword, createNewAdmin, getAllUser, revokeUserAccess, getUser, deleteUser };
