@@ -180,6 +180,7 @@ const deleteUser = async (req, res) => {
         const decodedData = jwt.verify(token, process.env.JWT_SECRET);
         if (decodedData.role.toLowerCase() !== 'admin') return res.status(403).send({ message: "unauthorized" });
         const user = await User.findByIdAndDelete(id);
+        if (user.role.toLowerCase() == 'admin') return res.status(403).send({ message: "Can not delete user" });
         if (!user) return res.status(404).send({ message: "User not found, sign up" });
         res.status(200).json({ "message": `${user.username} deleted successfully.` });
     } catch (error) {
