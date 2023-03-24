@@ -44,7 +44,7 @@ const updateCampaign = async (req, res) => {
         if (bounce_rate) campaign.bounce_rate = bounce_rate;
         if (unsubscribe) campaign.unsubscribe = unsubscribe;
         if (email_sent) campaign.email_sent = email_sent;
-if (total_emails_in_csv_file) campaign.total_emails_in_csv_file = total_emails_in_csv_file;
+        if (total_emails_in_csv_file) campaign.total_emails_in_csv_file = total_emails_in_csv_file;
         await campaign.save();
         res.status(200).send({ message: "Campaign updated successfully." });
     } catch (error) {
@@ -57,10 +57,6 @@ if (total_emails_in_csv_file) campaign.total_emails_in_csv_file = total_emails_i
 const getACampaign = async (req, res) => {
     try {
         const campaignID = req.params.campaignID;
-        const token = req.headers.authorization.split(' ')[1];
-        if (token.trim() == '') return res.status(403).send({ message: "Token is undefined." });
-        const decodedData = jwt.verify(token, process.env.JWT_SECRET);
-        if (decodedData.role.trim().toLowerCase() !== 'admin') return res.status(403).send({ message: "Unauthorized user." });
         const campaign = await Campaign.findOne({ campaignID });
         if (!campaign) return res.status(404).send({ message: "Campaign not found." });
         res.status(200).send(campaign);
