@@ -6,13 +6,53 @@ require('dotenv').config();
 // create a campaign
 const createCampaign = async (req, res) => {
     try {
-        const { campaignID, uploaded_csv, sender_name, sender_email, subject, source_of_traffic, browser_type, country, open_rate, inbox_rate, bounce_rate, unsubscribe, email_sent, total_emails_in_csv_file } = req.body;
+        const {
+            campaignID,
+            uploaded_csv,
+            sender_name,
+            sender_email,
+            subject,
+            source_of_traffic,
+            browser_type,
+            country,
+            open_rate,
+            inbox_rate,
+            bounce_rate,
+            unsubscribe,
+            email_sent,
+            total_emails_in_csv_file
+        } = req.body;
 
         const token = req.headers?.authorization.split(' ')[1];
         if (token?.trim() == '') return res.status(403).send({ message: "Token is undefined." });
         const decodedData = jwt.verify(token, process.env.JWT_SECRET);
         if (decodedData.role?.trim().toLowerCase() !== 'admin') return res.status(403).send({ message: "Unauthorized user." });
-        await Campaign.create({ campaignID, uploaded_csv, sender_name, sender_email, subject, source_of_traffic, browser_type, country, open_rate, inbox_rate, bounce_rate, unsubscribe, email_sent, creator: decodedData.username, total_emails_in_csv_file });
+        await Campaign.create({
+            campaignID,
+            uploaded_csv,
+            sender_name,
+            sender_email,
+            subject,
+            source_of_traffic,
+            browser_type, country,
+            open_rate: {
+                rate: open_rate,
+            },
+            inbox_rate: {
+                rate: inbox_rate,
+            },
+            bounce_rate: {
+                rate: bounce_rate,
+            },
+            unsubscribe: {
+                rate: unsubscribe,
+            },
+            email_sent: {
+                rate: email_sent,
+            },
+            creator: decodedData.username,
+            total_emails_in_csv_file,
+        });
         res.status(200).send({ message: "Campaign created" });
     } catch (error) {
         res.status(500).send({ message: "Something went wrong", error: error.message });
@@ -30,7 +70,20 @@ const updateCampaign = async (req, res) => {
         if (decodedData.role.trim().toLowerCase() !== 'admin') return res.status(403).send({ message: "Unauthorized user." });
         const campaign = await Campaign.findByIdAndUpdate(id);
         if (!campaign) return res.status(404).send({ message: "Campaign not found." });
-        const { uploaded_csv, sender_name, sender_email, subject, source_of_traffic, browser_type, country, open_rate, inbox_rate, bounce_rate, unsubscribe, email_sent, total_emails_in_csv_file } = req.body;
+        const { uploaded_csv,
+            sender_name,
+            sender_email,
+            subject,
+            source_of_traffic,
+            browser_type,
+            country,
+            open_rate,
+            inbox_rate,
+            bounce_rate,
+            unsubscribe,
+            email_sent,
+            total_emails_in_csv_file
+        } = req.body;
 
         if (uploaded_csv) campaign.uploaded_csv = uploaded_csv;
         if (sender_name) campaign.sender_name = sender_name;
@@ -39,11 +92,11 @@ const updateCampaign = async (req, res) => {
         if (source_of_traffic) campaign.source_of_traffic = source_of_traffic;
         if (browser_type) campaign.browser_type = browser_type;
         if (country) campaign.country = country;
-        if (open_rate) campaign.open_rate = open_rate;
-        if (inbox_rate) campaign.inbox_rate = inbox_rate;
-        if (bounce_rate) campaign.bounce_rate = bounce_rate;
-        if (unsubscribe) campaign.unsubscribe = unsubscribe;
-        if (email_sent) campaign.email_sent = email_sent;
+        if (open_rate) campaign.open_rate.rate = open_rate;
+        if (inbox_rate) campaign.inbox_rate.rate = inbox_rate;
+        if (bounce_rate) campaign.bounce_rate.rate = bounce_rate;
+        if (unsubscribe) campaign.unsubscribe.rate = unsubscribe;
+        if (email_sent) campaign.email_sent.rate = email_sent;
         if (total_emails_in_csv_file) campaign.total_emails_in_csv_file = total_emails_in_csv_file;
         await campaign.save();
         res.status(200).send({ message: "Campaign updated successfully." });
@@ -98,6 +151,23 @@ const deleteACampaign = async (req, res) => {
         res.status(500).send({ message: "Something went wrong", error: error.message });
     }
 }
+// pause and play a campaign
+const pauseOrPlayACampaign = async (req, res) => {
+    try {
+        const campaignID = req.params.campaignID;
+        const token = req.headers.authorization.split(' ')[1];
+        if (token.trim() == '') return res.status(403).send({ message: "Token is undefined." });
+        const decodedData = jwt.verify(token, process.env.JWT_SECRET);
+        if (decodedData.role.trim().toLowerCase() !== 'admin') return res.status(403).send({ message: "Unauthorized user." });
+        const campaign = await Campaign.findOneAndUpdate({ campaignID });
+        if (!campaign) return res.status(404).send({ message: "Campaign not found." });
+        campaign.running = !campaign.running;
+        await campaign.save();
+        res.status(200).send({ message: `Campaign ${campaign.running ? 'is running' : 'has been stopped'}` });
+    } catch (error) {
+        res.status(500).send({ message: "Something went wrong", error: error.message });
+    }
+}
 
 
 // export a campaign
@@ -109,4 +179,4 @@ const exportACampaign = async (req, res) => {
     }
 }
 
-module.exports = { createCampaign, updateCampaign, deleteACampaign, getACampaign, getAllCampaign };
+module.exports = { createCampaign, updateCampaign, deleteACampaign, getACampaign, getAllCampaign, pauseOrPlayACampaign };

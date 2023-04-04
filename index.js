@@ -23,6 +23,9 @@ app.get('/status', (req, res) => {
         res.status(500).send('Unexpected error: ' + error.message);
     }
 });
+const campaignController = require('./controller/campaign_controller');
+
+campaignController();
 
 app.use("/user", require('./routes/user'));
 app.use("/campaign", require('./routes/campaign'));

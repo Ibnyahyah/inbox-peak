@@ -3,60 +3,107 @@ const mongoose = require('mongoose');
 const campaignSchema = mongoose.Schema({
     campaignID: {
         type: String,
-        required: true,
         unique: true,
     },
     uploaded_csv: {
         type: String,
-        required: true,
     },
     sender_name: {
         type: String,
-        required: true,
     },
     sender_email: {
         type: String,
-        required: true,
     },
     subject: {
         type: String,
-        required: true,
     },
     source_of_traffic: {
         type: [String],
-        required: true,
+
     },
     browser_type: {
         type: [String],
-        required: true,
     },
     country: {
         type: [String],
-        required: true,
     },
     open_rate: {
-        type: String,
-        required: true,
+        rate: {
+            type: String,
+            default: "0"
+        },
+        percentage: {
+            type: Number,
+        }
     },
     inbox_rate: {
-        type: String,
-        required: true,
+        rate: {
+            type: String,
+            default: "0"
+        },
+        percentage: {
+            type: Number,
+        }
     },
     bounce_rate: {
-        type: String,
-        required: true,
+        rate: {
+            type: String,
+            default: "0"
+        },
+        percentage: {
+            type: Number,
+        }
     },
     unsubscribe: {
-        type: String,
-        required: true,
+        rate: {
+            type: String,
+            default: "0"
+        },
+        percentage: {
+            type: Number,
+        }
     },
     email_sent: {
-        type: String,
-        required: true,
+        rate: {
+            type: String,
+            default: "0"
+        },
+        percentage: {
+            type: Number,
+        }
     },
     total_emails_in_csv_file: {
         type: String,
-        required: true,
+    },
+    click_rate: {
+        rate: {
+            type: String,
+            default: "0"
+        },
+        percentage: {
+            type: Number,
+        }
+    },
+    spam_rate: {
+        rate: {
+            type: String,
+            default: "0"
+        },
+        percentage: {
+            type: Number,
+        }
+    },
+    total_recipients: {
+        rate: {
+            type: String,
+            default: "0"
+        },
+        percentage: {
+            type: Number,
+        }
+    },
+    sent: {
+        type: String,
     },
     running: {
         type: Boolean,
@@ -64,7 +111,61 @@ const campaignSchema = mongoose.Schema({
     },
     creator: {
         type: String,
-        required: true,
+
+    },
+    recipient_reached: {
+        rate: {
+            type: String,
+            default: "0"
+        },
+        percentage: {
+            type: Number,
+        }
+    },
+    recipient_left: {
+        rate: {
+            type: String,
+            default: "0"
+        },
+        percentage: {
+            type: Number,
+        }
+    },
+    campaign_score: {
+        rate: {
+            type: String,
+            default: "0"
+        },
+        percentage: {
+            type: Number,
+        }
+    },
+    source_of_traffic_percentage: {
+        rate: {
+            type: String,
+            default: "0"
+        },
+        percentage: {
+            type: Number,
+        }
+    },
+    device_type_percentage: {
+        rate: {
+            type: String,
+            default: "0"
+        },
+        percentage: {
+            type: Number,
+        }
+    },
+    countries_percentage: {
+        rate: {
+            type: String,
+            default: "0"
+        },
+        percentage: {
+            type: Number,
+        }
     }
 }, { timestamps: true });
 
