@@ -36,19 +36,19 @@ const createCampaign = async (req, res) => {
             source_of_traffic,
             browser_type, country,
             open_rate: {
-                rate: open_rate,
+                rate: Number(open_rate),
             },
             inbox_rate: {
-                rate: inbox_rate,
+                rate: Number(inbox_rate),
             },
             bounce_rate: {
-                rate: bounce_rate,
+                rate: Number(bounce_rate),
             },
             unsubscribe: {
-                rate: unsubscribe,
+                rate: Number(unsubscribe),
             },
             email_sent: {
-                rate: email_sent,
+                rate: Number(email_sent),
             },
             creator: decodedData.username,
             total_emails_in_csv_file,
