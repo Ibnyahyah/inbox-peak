@@ -11,7 +11,6 @@ function valueDistributor(value) {
 }
 function percentageCalculator({ total_value, value }) {
     let result = ((value / total_value) * 100)
-    console.log(result)
     return result;
 }
 
@@ -20,12 +19,19 @@ async function customPercentageAndRateAdder({ campaign, element, calculated_valu
     campaign[element].percentage = percentageCalculator({ total_value: Number(campaign.total_emails_in_csv_file), value: campaign[element].rate });
 }
 
-// function mapper({campaign, arr}){
-//     let newArr = [];
-//     campaign[arr].map((element)=>{
-//         percentageCalculator()
-//     });
-// }
+function mapper(campaign, arr) {
+    let newArr = [];
+    campaign[arr].forEach((element, index, array) => {
+        let obj = {
+            name: '',
+            percentage: 0,
+        };
+        obj.name = element;
+        obj.percentage = (per[randomNumber()] + index) / array.length * 100;
+        newArr.push(obj);
+    });
+    return newArr;
+}
 
 const campaignController = async (req, res) => {
     try {
@@ -67,24 +73,20 @@ const campaignController = async (req, res) => {
                     }
                     campaign.total_recipients.rate = total_recipients_value;
                     campaign.total_recipients.percentage = percentageCalculator({ total_value: campaign.total_emails_in_csv_file, value: campaign.total_recipients.rate });
-
-                    // customPercentageAndRateAdder({ campaign, element: 'total_recipients', calculated_value: total_recipients_value });
                     if (!(Number(campaign.total_emails_in_csv_file) - Number(campaign.total_recipients_value)).toString().startsWith('-')) {
                         customPercentageAndRateAdder({ campaign, element: 'click_rate', calculated_value: click_rate_value });
                         customPercentageAndRateAdder({ campaign, element: 'spam_rate', calculated_value: spam_rate_value });
                         customPercentageAndRateAdder({ campaign, element: 'recipient_reached', calculated_value: recipient_reached_value });
-                        campaign.recipient_left.rate = recipient_left_value;
-                        campaign.recipient_left.percentage = percentageCalculator({ total_value: campaign.total_emails_in_csv_file, value: campaign.recipient_left.rate });
-                        // customPercentageAndRateAdder({ campaign, element: 'recipient_left', calculated_value: recipient_left_value });
                         customPercentageAndRateAdder({ campaign, element: 'campaign_score', calculated_value: campaign_score_value });
                         customPercentageAndRateAdder({ campaign, element: 'bounce_rate', calculated_value: bounce_rate_value });
                         customPercentageAndRateAdder({ campaign, element: 'inbox_rate', calculated_value: inbox_rate_value });
                         customPercentageAndRateAdder({ campaign, element: 'open_rate', calculated_value: open_rate_value });
-
-                        // customPercentageAndRateAdder({ campaign, element: 'source_of_traffic_percentage', calculated_value });
-                        // customPercentageAndRateAdder({ campaign, element: 'device_type_percentage', calculated_value });
-                        // customPercentageAndRateAdder({ campaign, element: 'countries_percentage', calculated_value });
                         customPercentageAndRateAdder({ campaign, element: 'unsubscribe', calculated_value: unsubscribe_rate_value });
+                        campaign.recipient_left.rate = recipient_left_value;
+                        campaign.recipient_left.percentage = percentageCalculator({ total_value: campaign.total_emails_in_csv_file, value: campaign.recipient_left.rate });
+                        campaign.countries_percentage = mapper(campaign, 'country');
+                        campaign.source_of_traffic_percentage = mapper(campaign, 'source_of_traffic');
+                        campaign.device_type_percentage = mapper(campaign, 'browser_type');
                         await campaign.save();
                     }
                 })();

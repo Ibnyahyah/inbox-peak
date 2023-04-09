@@ -112,6 +112,7 @@ const getACampaign = async (req, res) => {
         const campaignID = req.params.campaignID;
         const campaign = await Campaign.findOne({ campaignID });
         if (!campaign) return res.status(404).send({ message: "Campaign not found." });
+        console.log(campaign);
         res.status(200).send(campaign);
     } catch (error) {
         res.status(500).send({ message: "Something went wrong", error: error.message });
