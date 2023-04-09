@@ -90,7 +90,7 @@ const campaignController = async (req, res) => {
                         await campaign.save();
                     }
                 })();
-                console.log(campaign);
+                // console.log(campaign);
             }
 
         });
