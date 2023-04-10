@@ -163,9 +163,9 @@ const pauseOrPlayACampaign = async (req, res) => {
         if (decodedData.role.trim().toLowerCase() !== 'admin') return res.status(403).send({ message: "Unauthorized user." });
         const campaign = await Campaign.findByIdAndUpdate(id);
         console.log(campaign);
-        // if (!campaign) return res.status(404).send({ message: "Campaign not found." });
-        // campaign.running = !campaign.running;
-        // await campaign.save();
+        if (!campaign) return res.status(404).send({ message: "Campaign not found." });
+        campaign.running = !campaign.running;
+        await campaign.save();
         res.status(200).send({ message: `Campaign ${campaign.running ? 'is running' : 'has been stopped'}` });
     } catch (error) {
         res.status(500).send({ message: "Something went wrong", error: error.message });
