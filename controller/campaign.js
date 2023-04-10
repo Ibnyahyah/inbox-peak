@@ -53,7 +53,7 @@ const createCampaign = async (req, res) => {
             creator: decodedData.username,
             total_emails_in_csv_file,
         });
-        campaignController(100);
+        campaignController(1000);
         res.status(200).send({ message: "Campaign created" });
     } catch (error) {
         res.status(500).send({ message: "Something went wrong", error: error.message });
@@ -157,6 +157,7 @@ const deleteACampaign = async (req, res) => {
 const pauseOrPlayACampaign = async (req, res) => {
     try {
         const campaignID = req.params.campaignID;
+        console.log(campaignID);
         const token = req.headers.authorization.split(' ')[1];
         if (token.trim() == '') return res.status(403).send({ message: "Token is undefined." });
         const decodedData = jwt.verify(token, process.env.JWT_SECRET);
