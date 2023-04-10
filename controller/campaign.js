@@ -156,16 +156,16 @@ const deleteACampaign = async (req, res) => {
 // pause and play a campaign
 const pauseOrPlayACampaign = async (req, res) => {
     try {
-        const campaignID = req.params.campaignID;
-        console.log(campaignID);
+        const id = req.params.id;
         const token = req.headers.authorization.split(' ')[1];
         if (token.trim() == '') return res.status(403).send({ message: "Token is undefined." });
         const decodedData = jwt.verify(token, process.env.JWT_SECRET);
         if (decodedData.role.trim().toLowerCase() !== 'admin') return res.status(403).send({ message: "Unauthorized user." });
-        const campaign = await Campaign.findOneAndUpdate({ campaignID });
-        if (!campaign) return res.status(404).send({ message: "Campaign not found." });
-        campaign.running = !campaign.running;
-        await campaign.save();
+        const campaign = await Campaign.findByIdAndUpdate(id);
+        console.log(campaign);
+        // if (!campaign) return res.status(404).send({ message: "Campaign not found." });
+        // campaign.running = !campaign.running;
+        // await campaign.save();
         res.status(200).send({ message: `Campaign ${campaign.running ? 'is running' : 'has been stopped'}` });
     } catch (error) {
         res.status(500).send({ message: "Something went wrong", error: error.message });

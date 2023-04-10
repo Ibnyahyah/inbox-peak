@@ -6,6 +6,6 @@ router.patch('/update-campaign/:id', updateCampaign);
 router.delete('/delete-campaign/:campaignID', deleteACampaign);
 router.get('/:campaignID', getACampaign);
 router.get('/', getAllCampaign);
-router.patch('/pause-or-play/:campaignID', pauseOrPlayACampaign);
+router.patch('/pause-or-play/:id', pauseOrPlayACampaign);
 
 module.exports = router;
