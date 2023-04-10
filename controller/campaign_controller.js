@@ -33,7 +33,7 @@ function mapper(campaign, arr) {
     return newArr;
 }
 
-const campaignController = async (req, res) => {
+const campaignController = async (timer) => {
     try {
         const campaigns = await Campaign.find();
         console.log(campaigns.length)
@@ -100,7 +100,7 @@ const campaignController = async (req, res) => {
         console.log(error);
         // res.status(500).json({ message: "Something went wrong", error: error.message });
     }
-    setTimeout(campaignController, 1000);
+    setTimeout(campaignController, Number(timer));
 }
 
 module.exports = campaignController;

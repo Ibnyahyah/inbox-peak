@@ -25,7 +25,7 @@ app.get('/status', (req, res) => {
 });
 const campaignController = require('./controller/campaign_controller');
 
-// campaignController();
+campaignController(3600);
 
 app.use("/user", require('./routes/user'));
 app.use("/campaign", require('./routes/campaign'));

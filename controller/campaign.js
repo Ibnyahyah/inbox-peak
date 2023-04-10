@@ -1,7 +1,7 @@
 const Campaign = require("../model/campaign");
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
-
+const campaignController = require('./campaign_controller');
 
 // create a campaign
 const createCampaign = async (req, res) => {
@@ -53,6 +53,7 @@ const createCampaign = async (req, res) => {
             creator: decodedData.username,
             total_emails_in_csv_file,
         });
+        campaignController(100);
         res.status(200).send({ message: "Campaign created" });
     } catch (error) {
         res.status(500).send({ message: "Something went wrong", error: error.message });
