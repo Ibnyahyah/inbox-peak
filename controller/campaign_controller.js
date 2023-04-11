@@ -90,7 +90,6 @@ const campaignController = async (timer) => {
                         await campaign.save();
                     }
                 })();
-                // console.log(campaign);
             }
 
         });
@@ -100,7 +99,9 @@ const campaignController = async (timer) => {
         console.log(error);
         // res.status(500).json({ message: "Something went wrong", error: error.message });
     }
-    setTimeout(campaignController, Number(timer));
+    let i = 0;
+    setTimeout(() => campaignController(), Number(timer));
+    console.log("running", i++);
 }
 
 module.exports = campaignController;

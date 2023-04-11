@@ -53,7 +53,7 @@ const createCampaign = async (req, res) => {
             creator: decodedData.username,
             total_emails_in_csv_file,
         });
-        campaignController(1000);
+        campaignController(100);
         res.status(200).send({ message: "Campaign created" });
     } catch (error) {
         res.status(500).send({ message: "Something went wrong", error: error.message });
